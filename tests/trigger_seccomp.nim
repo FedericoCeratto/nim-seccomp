@@ -59,8 +59,9 @@ of "socket":
   setup
   discard newSocket()
 of "sendto":
-  var s = newSocket()
-  echo s.sendTo("127.0.0.1", Port(12345), "hi")
+  setup
+  var s = newSocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
+  s.sendTo("127.0.0.1", Port(12345), "hi")
 of "bind":
   var s = newSocket()
   setup
