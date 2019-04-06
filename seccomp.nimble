@@ -17,10 +17,4 @@ task test, "Basic test":
   exec "nim c -p:. -r tests/syscall_num.nim"
 
 task test_trigger_seccomp, "Test triggering seccomp":
-  exec "nim c -p:. tests/trigger_seccomp.nim"
-  let tests = @["mkdir", "mkdir_helper", "rmdir",
-  "walkdir", "nothing", "open", "stat", "sleep", "update_seccomp",
-  "socket", "sendto", "bind", "listen", "connect"]
-  for tname in tests:
-    exec("./tests/trigger_seccomp " & tname & " || echo OK")
-    #exec("strace ./tests/trigger_seccomp " & tname & " || echo OK")
+  exec "nim c -p:. -r tests/trigger_seccomp.nim"

@@ -10,8 +10,28 @@ import os, net
 import seccomp
 
 if paramCount() < 1:
-  echo "Missing parameter"
-  quit(1)
+  # When run without any parameter, act as a wrapper for the tests
+  const test_names = @["mkdir", "mkdir_helper", "rmdir",
+  "walkdir", "nothing", "open", "stat", "sleep", "update_seccomp",
+  "socket", "sendto", "bind", "listen", "connect", "execShellCmd"]
+  var failed_tests_cnt = 0
+  for tname in test_names:
+    let a = execShellCmd("./tests/trigger_seccomp " & tname)
+    case a:
+      of 159:
+        echo "OK"
+      of 0:
+        if tname == "nothing" or tname == "execShellCmd":
+          echo "OK"
+        else:
+          echo "Unexpected success"
+          failed_tests_cnt.inc
+      else:
+        echo "Unexpected " & $a
+        failed_tests_cnt.inc
+
+  echo $failed_tests_cnt & " failed tests"
+  quit(-1 * failed_tests_cnt)
 
 echo ""
 echo "Testing ", paramStr(1)
@@ -40,8 +60,6 @@ of "walkdir":
     echo(path)
 of "nothing":
   setup
-  echo "This test is expected to fail with 'FAILED' in the next line and no 'OK'"
-  discard
 of "open":
   setup
   discard open("/dev/zero", fmRead)
@@ -78,7 +96,8 @@ of "connect":
   var s = newSocket()
   setup
   s.connect("localhost", Port(80))
+of "execShellCmd":
+  setSeccomp("read write execve shmctl rt_sigaction rt_sigprocmask clone brk access openat fstat close mmap mprotect arch_prctl munmap getuid getgid getpid geteuid getppid stat getegid set_tid_address set_robust_list prlimit64 lseek alarm fcntl wait4 rt_sigreturn exit_group prctl statfs")
+  doAssert execShellCmd("true") == 0
 else:
   echo "Unknown test name"
-
-echo "FAILED"
