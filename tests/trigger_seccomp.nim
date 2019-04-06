@@ -78,5 +78,7 @@ of "connect":
   var s = newSocket()
   setup
   s.connect("localhost", Port(80))
+else:
+  echo "Unknown test name"
 
 echo "FAILED"
