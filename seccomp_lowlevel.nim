@@ -287,7 +287,7 @@ const SCMP_ACT_TRAP* = 0x00030000
 #  Return the specified error code
 #
 
-template scmp_Act_Errno*(x: expr): expr =
+template scmp_Act_Errno*(x: untyped): untyped =
   (0x00050000 or ((x) and 0x0000FFFF))
 
 
@@ -297,7 +297,7 @@ template scmp_Act_Errno*(x: expr): expr =
 #  Notify a tracing process with the specified value
 #
 
-template scmp_Act_Trace*(x: expr): expr =
+template scmp_Act_Trace*(x: untyped): untyped =
   (0x7FF00000 or ((x) and 0x0000FFFF))
 
 
