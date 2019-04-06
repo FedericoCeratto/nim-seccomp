@@ -53,9 +53,16 @@ proc add_rule*(ctx: ScmpFilterCtx, action: ScmpAction, syscall_name: string, arg
   discard ctx.seccompRuleAdd(action.uint32, num, 0)
 
 
-# prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)
-#  prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &bpf_prog)))
-#
-# prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)  = 0
-# seccomp(SECCOMP_SET_MODE_STRICT, 1, NULL) = -1 EINVAL (Invalid argument)
-# seccomp(SECCOMP_SET_MODE_FILTER, 0, {len=11, filter=0x1df3420}) = 0
+proc setSeccomp*(allow: seq[string], defaultAction = ScmpAction.Kill) =
+  ## Helper to configure seccomp. Whitelist syscalls in `allow`
+  let ctx = seccomp_ctx(defaultAction)
+  for syscall_name in allow:
+    ctx.add_rule(Allow, syscall_name)
+  ctx.load()
+
+proc setSeccomp*(allow: string, defaultAction = ScmpAction.Kill) =
+  ## Helper to configure seccomp. Whitelist whitespace-separated syscalls in `allow`
+  let ctx = seccomp_ctx(defaultAction)
+  for syscall_name in allow.split(' '):
+    ctx.add_rule(Allow, syscall_name)
+  ctx.load()

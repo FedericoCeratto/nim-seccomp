@@ -34,15 +34,24 @@ modules
 ----
 import seccomp
 
-let ctx = seccomp_ctx()
-ctx.add_rule(Allow, "write")
-ctx.add_rule(Allow, "exit_group")
-ctx.load()
+setSeccomp("write exit_group")
 
 echo """Seccomp is now enabled. Future attempts to change the Seccomp configuration
 or to call forbidden system calls will cause the process to be terminated"""
 
 # e.g. createDir("/tmp/foo")
+----
+
+or:
+[source,nim]
+----
+import seccomp
+
+let ctx = seccomp_ctx()
+ctx.add_rule(Allow, "write")
+ctx.add_rule(Allow, "exit_group")
+ctx.load()
+
 ----
 
 https://github.com/FedericoCeratto/nim-seccomp/blob/master/tests/trigger_seccomp.nim[tests/trigger_seccomp.nim] contains running examples of syscalls that will be blocked

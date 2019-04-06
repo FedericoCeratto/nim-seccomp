@@ -28,6 +28,9 @@ case paramStr(1)
 of "mkdir":
   setup
   createDir("/tmp/seccomp_test")
+of "mkdir_helper":
+  setSeccomp("write exit_group")
+  createDir("/tmp/seccomp_test")
 of "rmdir":
   setup
   removeDir("/tmp/seccomp_test")
