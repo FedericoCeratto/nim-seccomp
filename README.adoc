@@ -2,6 +2,11 @@
 
 Nim adapter for the https://en.wikipedia.org/wiki/Seccomp[Seccomp sandbox] facility
 
+image:https://img.shields.io/badge/status-beta-orange.svg[badge]
+image:https://img.shields.io/github/tag/FedericoCeratto/nim-seccomp.svg[tags]
+image:https://img.shields.io/badge/License-LGPL%20v3-blue.svg[License]
+
+
 ### Features
 
 * Provides a high-level adaptor in seccomp.nim
