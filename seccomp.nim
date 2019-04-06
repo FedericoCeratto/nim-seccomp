@@ -17,9 +17,11 @@ proc get_version*(): (int, int, int) =
 
 type
   ScmpAction* = enum
-    Kill = 0x00000000
-    Trap = 0x00030000,
-    Allow = 0x7FFF0000,
+    Kill =  0x00000000    # SECCOMP_RET_KILL
+    Trap =  0x00030000,   # SECCOMP_RET_TRAP
+    Errno = 0x00050000,   # SECCOMP_RET_ERRNO
+    Log =   0x00070000,   # SECCOMP_RET_LOG
+    Allow = 0x7FFF0000,   # SECCOMP_RET_ALLOW
 
 proc seccomp_ctx*(defaultAction = ScmpAction.Kill): ScmpFilterCtx =
   ## Create seccomp context
