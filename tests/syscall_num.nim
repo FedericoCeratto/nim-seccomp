@@ -1,6 +1,6 @@
 import unittest, strutils
 
-import seccomp_lowlevel
+import seccomp/seccomp_lowlevel
 
 const syscall_list = splitLines """0 read
 1 write

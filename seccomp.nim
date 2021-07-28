@@ -6,7 +6,7 @@
 
 import strutils
 
-import seccomp_lowlevel
+import seccomp/seccomp_lowlevel
 
 
 proc get_version*(): (int, int, int) =
